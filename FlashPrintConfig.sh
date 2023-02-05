@@ -12,20 +12,20 @@ dir_dedicated="$(readlink -m "${dir_dedicated}";)";
 
 ext=".cfg";
 
-normalize_configurations() {
-    local folder="${dir_dedicated}/${1}";
+maintain_settings() {
+    local folder_flash_print="${dir_flash_print}/${1}";
+    local folder_dedicated="${dir_dedicated}/${1}";
 
-    [ -d "${folder}" ] &&
-    find "${folder}/"*"${ext}" -type f -regextype posix-extended ! -regex ".+/${2}\\${ext}$" | while read file; do
+    [ ! -L "${folder_flash_print}" ] &&
+    cp -vrf "${folder_flash_print}" "${dir_dedicated}" && rm -vrf "${folder_flash_print}" &&
+    ln -vs "${folder_dedicated}" "${dir_flash_print}";
+
+    [ true = ${2} ] &&
+    find "${folder_dedicated}/"*"${ext}" -type f -regextype posix-extended ! -regex ".+/${3}\\${ext}$" |
+    while read file; do
         sed -Ei "s/(profileName=).*/\1$(basename "${file}" "${ext}" | cut -d_ -f3-;)/" "${file}";
     done;
 }
 
-find "${dir_dedicated}/"* -maxdepth 0 -type d -printf "%f\n" | while read folder; do
-    folder_backup="${dir_flash_print}/${folder}";
-
-    [ ! -L "${folder_backup}" ] &&
-    mv -vf "${folder_backup}" "${dir_dedicated}" && ln -vs "${dir_dedicated}/${folder}" "${dir_flash_print}";
-done;
-
-normalize_configurations "slice_profile" "${exclude_slice_profile}";
+maintain_settings "slice_profile" true "${exclude_slice_profile}";
+maintain_settings "slice_profile_def" false;
