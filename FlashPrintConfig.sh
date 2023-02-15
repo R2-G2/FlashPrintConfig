@@ -23,7 +23,7 @@ maintain_settings() {
     [ true = ${2} ] &&
     find "${folder_dedicated}/"*"${ext}" -type f -regextype posix-extended ! -regex ".+/${3}\\${ext}$" |
     while read file; do
-        sed -Ei "s/(profileName=).*/\1$(basename "${file}" "${ext}" | cut -d_ -f3-;)/" "${file}";
+        sed -Ei "s/^(profileName=).*/\1$(basename "${file}" "${ext}" | cut -d_ -f3-;)/" "${file}";
     done;
 }
 
