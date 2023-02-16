@@ -22,8 +22,8 @@ editor config.sh
 
 Simply run **FlashPrintConfig**.
 
-This will back up directories from your **FlashPrint** configuration folder matching the ones located in your dedicated
-configuration folder and replace them with symlinks to latter ones.
+This will back up relevant **FlashPrint** configuration folders to your dedicated configuration directory and replace
+them with symlinks. Some configurations will get their profile name rewritten based on the filename.
 
 ```shell
 ./FlashPrintConfig.sh
